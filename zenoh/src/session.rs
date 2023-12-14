@@ -724,6 +724,24 @@ impl Session {
         }
     }
 
+    #[zenoh_macros::unstable]
+    pub fn put_with_ack<'a, 'b, TryIntoKeyExpr, IntoValue>(
+        &'a self,
+        key_expr: TryIntoKeyExpr,
+        value: IntoValue,
+    ) -> PutWithAckBuilder<'a, 'b>
+    where
+        TryIntoKeyExpr: TryInto<KeyExpr<'b>>,
+        <TryIntoKeyExpr as TryInto<KeyExpr<'b>>>::Error: Into<zenoh_result::Error>,
+        IntoValue: Into<Value>,
+    {
+        PutWithAckBuilder {
+            session: self,
+            key_expr: key_expr.try_into().map_err(Into::into),
+            value: value.into(),
+        }
+    }
+
     /// Delete data.
     ///
     /// # Arguments

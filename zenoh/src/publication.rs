@@ -23,7 +23,10 @@ use crate::sample::DataInfo;
 use crate::Encoding;
 use crate::SessionRef;
 use crate::Undeclarable;
+use config::unwrap_or_default;
+use std::borrow::Cow;
 use std::future::Ready;
+use std::time::Duration;
 use zenoh_core::{zread, AsyncResolve, Resolvable, Resolve, SyncResolve};
 use zenoh_protocol::network::push::ext;
 use zenoh_protocol::network::Mapping;
@@ -192,6 +195,61 @@ impl AsyncResolve for PutBuilder<'_, '_> {
 
     fn res_async(self) -> Self::Future {
         std::future::ready(self.res_sync())
+    }
+}
+
+#[zenoh_macros::unstable]
+#[must_use = "Resolvables do nothing unless you resolve them using the `res` method from either `SyncResolve` or `AsyncResolve`"]
+#[derive(Debug)]
+pub struct PutWithAckBuilder<'a, 'b> {
+    pub(crate) session: &'a Session,
+    pub(crate) key_expr: ZResult<KeyExpr<'b>>,
+    pub(crate) value: Value,
+}
+
+#[zenoh_macros::unstable]
+impl Resolvable for PutWithAckBuilder<'_, '_> {
+    type To = ZResult<()>;
+}
+
+#[zenoh_macros::unstable]
+impl SyncResolve for PutWithAckBuilder<'_, '_> {
+    fn res_sync(self) -> <Self as Resolvable>::To {
+        let key_expr = self.key_expr?;
+        let selector = Selector {
+            key_expr,
+            parameters: Cow::from(""),
+        };
+
+        let (callback, receiver) = DefaultHandler.into_cb_receiver_pair();
+        let conf = self.session.runtime.config.lock();
+
+        self.session
+            .query(
+                &selector,
+                &None,
+                QueryTarget::default(),
+                QueryConsolidation::default(),
+                Locality::default(),
+                Duration::from_millis(unwrap_or_default!(conf.queries_default_timeout())),
+                Some(self.value),
+                callback,
+            )
+            .map(|_| receiver);
+
+        // FIXME: the above returns a Reply, we should probably return an 'Ack'
+        // The `query` function must be understood first!
+
+        todo!()
+    }
+}
+
+#[zenoh_macros::unstable]
+impl AsyncResolve for PutWithAckBuilder<'_, '_> {
+    type Future = Ready<Self::To>;
+
+    fn res_async(self) -> Self::Future {
+        todo!()
     }
 }
 
