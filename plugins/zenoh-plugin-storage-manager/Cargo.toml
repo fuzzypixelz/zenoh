@@ -1,74 +1,135 @@
-#
-# Copyright (c) 2023 ZettaScale Technology
-#
-# This program and the accompanying materials are made available under the
-# terms of the Eclipse Public License 2.0 which is available at
-# http://www.eclipse.org/legal/epl-2.0, or the Apache License, Version 2.0
-# which is available at https://www.apache.org/licenses/LICENSE-2.0.
-#
-# SPDX-License-Identifier: EPL-2.0 OR Apache-2.0
-#
-# Contributors:
-#   ZettaScale Zenoh Team, <zenoh@zettascale.tech>
-#
 [package]
-rust-version = { workspace = true }
 name = "zenoh-plugin-storage-manager"
-version = { workspace = true }
-repository = { workspace = true }
-homepage = { workspace = true }
-authors = { workspace = true }
-edition = { workspace = true }
-license = { workspace = true }
-categories = { workspace = true }
 description = "The zenoh storages plugin."
 
-[features]
-default = ["no_mangle", "zenoh/default"]
-no_mangle = []
+[package.rust-version]
+workspace = true
 
-[lib]
-name = "zenoh_plugin_storage_manager"
-crate-type = ["cdylib", "rlib"]
+[package.version]
+workspace = true
 
-[dependencies]
-async-std = { workspace = true, features = ["default"] }
-async-trait = { workspace = true }
-crc = { workspace = true }
-const_format = { workspace = true }
-derive-new = { workspace = true }
-zenoh-util = {workspace = true }
-flume = { workspace = true }
-futures = { workspace = true }
-git-version = { workspace = true }
-libloading = { workspace = true }
-tracing = {workspace = true}
-serde = { workspace = true, features = ["default"] }
-serde_json = { workspace = true }
-urlencoding = { workspace = true }
-zenoh = { workspace = true, features = ["unstable"] }
-zenoh-collections = { workspace = true }
-zenoh-core = { workspace = true }
-zenoh-keyexpr = { workspace = true }
-zenoh-plugin-trait = { workspace = true }
-zenoh-result = { workspace = true }
-zenoh_backend_traits = { workspace = true }
+[package.repository]
+workspace = true
 
-[build-dependencies]
-rustc_version = { workspace = true }
-zenoh_backend_traits = { workspace = true }
-schemars = { workspace = true }
-serde = { workspace = true, features = ["default"] }
-serde_json = { workspace = true }
-jsonschema = { workspace = true }
+[package.homepage]
+workspace = true
 
-[dev-dependencies]
-async-global-executor = { workspace = true }
+[package.authors]
+workspace = true
 
+[package.edition]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.categories]
+workspace = true
+
+[package.metadata]
 [package.metadata.deb]
 name = "zenoh-plugin-storage-manager"
 maintainer = "zenoh-dev@eclipse.org"
 copyright = "2024 ZettaScale Technology"
 section = "net"
-license-file = ["../../LICENSE", "0"]
-depends = "zenohd (=0.11.0-dev-1)"
+license-file = [ "../../LICENSE", "0" ]
+depends = "zenohd (=0.11.0-rc.1)"
+
+[features]
+default = [ "no_mangle", "zenoh/default" ]
+no_mangle = []
+
+[lib]
+name = "zenoh_plugin_storage_manager"
+crate-type = [ "cdylib", "rlib" ]
+
+[dependencies]
+[dependencies.async-std]
+workspace = true
+features = [ "default" ]
+
+[dependencies.async-trait]
+workspace = true
+
+[dependencies.crc]
+workspace = true
+
+[dependencies.const_format]
+workspace = true
+
+[dependencies.derive-new]
+workspace = true
+
+[dependencies.zenoh-util]
+workspace = true
+
+[dependencies.flume]
+workspace = true
+
+[dependencies.futures]
+workspace = true
+
+[dependencies.git-version]
+workspace = true
+
+[dependencies.libloading]
+workspace = true
+
+[dependencies.tracing]
+workspace = true
+
+[dependencies.serde]
+workspace = true
+features = [ "default" ]
+
+[dependencies.serde_json]
+workspace = true
+
+[dependencies.urlencoding]
+workspace = true
+
+[dependencies.zenoh]
+workspace = true
+features = [ "unstable" ]
+
+[dependencies.zenoh-collections]
+workspace = true
+
+[dependencies.zenoh-core]
+workspace = true
+
+[dependencies.zenoh-keyexpr]
+workspace = true
+
+[dependencies.zenoh-plugin-trait]
+workspace = true
+
+[dependencies.zenoh-result]
+workspace = true
+
+[dependencies.zenoh_backend_traits]
+workspace = true
+
+[build-dependencies]
+[build-dependencies.rustc_version]
+workspace = true
+
+[build-dependencies.zenoh_backend_traits]
+workspace = true
+
+[build-dependencies.schemars]
+workspace = true
+
+[build-dependencies.serde]
+workspace = true
+features = [ "default" ]
+
+[build-dependencies.serde_json]
+workspace = true
+
+[build-dependencies.jsonschema]
+workspace = true
+
+[dev-dependencies]
+[dev-dependencies.async-global-executor]
+workspace = true
