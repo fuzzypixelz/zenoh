@@ -158,9 +158,9 @@ pub struct ZRuntimePool(HashMap<ZRuntime, OnceLock<Runtime>>);
 impl ZRuntimePool {
     fn new() -> Self {
         // Register a callback to clean the static variables.
-        unsafe {
-            libc::atexit(cleanup);
-        }
+        // unsafe {
+        //     libc::atexit(cleanup);
+        // }
         Self(ZRuntime::iter().map(|zrt| (zrt, OnceLock::new())).collect())
     }
 
